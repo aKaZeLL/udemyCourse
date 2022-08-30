@@ -7,4 +7,6 @@
 /public/bundles/
 /var/
 /vendor/
+/bin/
+symfony.exe
 ###< symfony/framework-bundle ###
