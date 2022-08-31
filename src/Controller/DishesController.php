@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\DishType;
 use App\Entity\Dishes;
 use App\Repository\DishesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,17 +25,42 @@ class DishesController extends AbstractController
     }
 	
 	#[Route('/create', name: 'create')]
-	public function create(Request $request, ManagerRegistry $doctrine): Response {
-		$dishes = new Dishes();
-		$dishes->setName('Pizza');
+	public function create(Request $request, ManagerRegistry $doctrine): Response
+	{
+		$dish = new Dishes();
+		$form = $this->createForm(DishType::class, $dish);
+		$form->handleRequest($request);
+		
+		if ($form->isSubmitted()) {
+			//entity manager
+			$em = $doctrine->getManager();
+			
+			$em->persist($dish);
+			$em->flush();
+			
+			return $this->redirect($this->generateUrl('app_dishes.edit'));
+		}
+		
+		
+		return $this->render('dishes/create.html.twig', [
+            'dishForm' => $form->createView()
+        ]);
+	}
+	
+	#[Route('/remove/{id}', name: 'remove')]
+	public function remove($id, DishesRepository $dr, ManagerRegistry $doctrine) 
+	{
+		$toDelete = $dr->find($id);
 		
 		//entity manager
 		$em = $doctrine->getManager();
 		
-		$em->persist($dishes);
+		$em->remove($toDelete);
 		$em->flush();
 		
-		return new Response('Pietanza Creata');
+		//Message
+		$this->addFlash('success', 'Elemento eliminato correttamente');
+		
+		return $this->redirect($this->generateUrl('app_dishes.edit'));
 	}
-	
 }

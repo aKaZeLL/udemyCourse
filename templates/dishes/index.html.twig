@@ -3,6 +3,13 @@
 {% block title %} Elenco Pietanze {% endblock %}
 
 {% block body %}
+
+{% for message in app.flashes('success')%}
+	<div class="alert alert-success">
+		<h4>{{message}}</h4>
+	</div>
+{% endfor%}
+
 <br>
 <div class="container">
 	<h2>Editor Pietanze</h2>
@@ -13,6 +20,9 @@
 				<td>Numero Ordinazione</td>
 				<td>Nome</td>
 				<td>Descrizione</td>
+				<td>Prezzo</td>
+				<td></td>
+				<td><a href="{{ path('app_dishes.create') }}">Aggiungi</a></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -21,6 +31,9 @@
 					<td>{{ dish.id }}</td>
 					<td>{{ dish.name }}</td>
 					<td>{{ dish.description }}</td>
+					<td>{{ dish.price }}</td>
+					<td><a href="{{ path('app_dishes.remove',{id: dish.id}) }}">Elimina</a></td>
+					<td></td>
 				</tr>
 			{% endfor %}
 		</tbody>
