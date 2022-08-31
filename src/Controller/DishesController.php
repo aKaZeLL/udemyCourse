@@ -35,6 +35,20 @@ class DishesController extends AbstractController
 			//entity manager
 			$em = $doctrine->getManager();
 			
+			//https://symfony.com/doc/current/controller/upload_file.html
+			$image = $form->get('Immagine')->getData();
+			
+			if ($image) {
+				$originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+				$newFilename = $originalFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+				$image->move(
+					$this->getParameter('images_folder'),
+					$newFilename
+                );
+				$dish->setImage($newFilename);
+			}
+
 			$em->persist($dish);
 			$em->flush();
 			
@@ -62,5 +76,13 @@ class DishesController extends AbstractController
 		$this->addFlash('success', 'Elemento eliminato correttamente');
 		
 		return $this->redirect($this->generateUrl('app_dishes.edit'));
+	}
+	
+	#[Route('/image/{id}', name: 'image')]
+	public function showImage(Dishes $dishes) //metodo alternativo alla remove. Ha un model binding da Request ad Object Dishes.id
+	{
+		return $this->render('dishes/showimage.html.twig', [
+            'dishes' => $dishes
+        ]);
 	}
 }
