@@ -85,4 +85,40 @@ class DishesController extends AbstractController
             'dishes' => $dishes
         ]);
 	}
+	
+	#[Route('/update/{id}', name: 'update')]
+	public function update($id, Request $request, ManagerRegistry $doctrine): Response
+	{
+		$em = $doctrine->getManager();
+		$dish = $em->getRepository(Dishes::class)->find($id);
+
+		$form = $this->createForm(DishType::class, $dish);
+		$form->handleRequest($request);
+		
+		if ($form->isSubmitted()) {
+			
+			//https://symfony.com/doc/current/controller/upload_file.html
+			$image = $form->get('Immagine')->getData();
+			
+			if ($image) {
+				$originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+				$newFilename = $originalFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+				$image->move(
+					$this->getParameter('images_folder'),
+					$newFilename
+                );
+				$dish->setImage($newFilename);
+			}
+
+			$em->flush();
+			
+			return $this->redirect($this->generateUrl('app_dishes.edit'));
+		}
+		
+		
+		return $this->render('dishes/create.html.twig', [
+            'dishForm' => $form->createView()
+        ]);
+	}
 }
