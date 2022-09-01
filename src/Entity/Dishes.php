@@ -25,6 +25,9 @@ class Dishes
     #[ORM\Column(nullable: true)]
     private ?float $price = null;
 
+    #[ORM\ManyToOne(inversedBy: 'dishes')]
+    private ?Category $category = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Dishes
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

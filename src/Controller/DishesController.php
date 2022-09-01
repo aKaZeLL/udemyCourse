@@ -25,13 +25,9 @@ class DishesController extends AbstractController
     }
 	
 	#[Route('/create/{id?}', name: 'create')]
-	public function create(?int $id, Request $request, ManagerRegistry $doctrine): Response
+	public function create(?Dishes $dish, Request $request, ManagerRegistry $doctrine): Response
 	{
-		$em = $doctrine->getManager();
-
-		if ($id) {
-			$dish = $em->getRepository(Dishes::class)->find($id);
-		} else {
+		if (!$dish) {
 			$dish = new Dishes();
 		}
 		
@@ -53,10 +49,9 @@ class DishesController extends AbstractController
                 );
 				$dish->setImage($newFilename);
 			}
-
-			if (!$id) {
-				$em->persist($dish);
-			}
+			$em = $doctrine->getManager();
+			
+			$em->persist($dish);
 			$em->flush();
 			
 			return $this->redirect($this->generateUrl('app_dishes.edit'));
