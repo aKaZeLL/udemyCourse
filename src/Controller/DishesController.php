@@ -24,16 +24,21 @@ class DishesController extends AbstractController
         ]);
     }
 	
-	#[Route('/create', name: 'create')]
-	public function create(Request $request, ManagerRegistry $doctrine): Response
+	#[Route('/create/{id?}', name: 'create')]
+	public function create(?int $id, Request $request, ManagerRegistry $doctrine): Response
 	{
-		$dish = new Dishes();
+		$em = $doctrine->getManager();
+
+		if ($id) {
+			$dish = $em->getRepository(Dishes::class)->find($id);
+		} else {
+			$dish = new Dishes();
+		}
+		
 		$form = $this->createForm(DishType::class, $dish);
 		$form->handleRequest($request);
 		
 		if ($form->isSubmitted()) {
-			//entity manager
-			$em = $doctrine->getManager();
 			
 			//https://symfony.com/doc/current/controller/upload_file.html
 			$image = $form->get('Immagine')->getData();
@@ -49,13 +54,14 @@ class DishesController extends AbstractController
 				$dish->setImage($newFilename);
 			}
 
-			$em->persist($dish);
+			if (!$id) {
+				$em->persist($dish);
+			}
 			$em->flush();
 			
 			return $this->redirect($this->generateUrl('app_dishes.edit'));
 		}
-		
-		
+
 		return $this->render('dishes/create.html.twig', [
             'dishForm' => $form->createView()
         ]);
@@ -83,42 +89,6 @@ class DishesController extends AbstractController
 	{
 		return $this->render('dishes/showimage.html.twig', [
             'dishes' => $dishes
-        ]);
-	}
-	
-	#[Route('/update/{id}', name: 'update')]
-	public function update($id, Request $request, ManagerRegistry $doctrine): Response
-	{
-		$em = $doctrine->getManager();
-		$dish = $em->getRepository(Dishes::class)->find($id);
-
-		$form = $this->createForm(DishType::class, $dish);
-		$form->handleRequest($request);
-		
-		if ($form->isSubmitted()) {
-			
-			//https://symfony.com/doc/current/controller/upload_file.html
-			$image = $form->get('Immagine')->getData();
-			
-			if ($image) {
-				$originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-				$newFilename = $originalFilename.'-'.uniqid().'.'.$image->guessExtension();
-
-				$image->move(
-					$this->getParameter('images_folder'),
-					$newFilename
-                );
-				$dish->setImage($newFilename);
-			}
-
-			$em->flush();
-			
-			return $this->redirect($this->generateUrl('app_dishes.edit'));
-		}
-		
-		
-		return $this->render('dishes/create.html.twig', [
-            'dishForm' => $form->createView()
         ]);
 	}
 }

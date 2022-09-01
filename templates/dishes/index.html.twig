@@ -32,8 +32,8 @@
 					<td><a href="{{ path('app_dishes.image',{id: dish.id}) }}">{{ dish.name }}</a></td>
 					<td>{{ dish.description }}</td>
 					<td>{{ dish.price }}</td>
+					<td><a href="{{ path('app_dishes.create',{id: dish.id}) }}">Modifica</a></td>
 					<td><a href="{{ path('app_dishes.remove',{id: dish.id}) }}">Elimina</a></td>
-					<td></td>
 				</tr>
 			{% endfor %}
 		</tbody>
