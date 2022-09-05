@@ -28,7 +28,7 @@ class Order
     private ?string $price = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $stasus = null;
+    private ?string $status = null;
 
     public function getId(): ?int
     {
@@ -83,14 +83,14 @@ class Order
         return $this;
     }
 
-    public function getStasus(): ?string
+    public function getStatus(): ?string
     {
-        return $this->stasus;
+        return $this->status;
     }
 
-    public function setStasus(?string $stasus): self
+    public function setStatus(?string $status): self
     {
-        $this->stasus = $stasus;
+        $this->status = $status;
 
         return $this;
     }

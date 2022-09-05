@@ -14,7 +14,7 @@
 								<h2><span>{{dish1.name}}</span>!</h2>
 								<p>prova {{dish1.description}} a {{dish1.price}} €</p>
 								<a href="{{path('app_menu')}}" class="site-btn">Menu</a>
-								<a href="#" class="site-btn sb-c2">Ordina ora!</a>
+								<a href="{{ path('app_order', {id: dish1.id}) }}" class="site-btn sb-c2">Ordina Ora!</a>
 							</div>
 						</div>
 						<div class="col-lg-6">
@@ -33,7 +33,7 @@
 								<h2><span>{{dish2.name}}</span>!</h2>
 								<p>prova {{dish2.description}} a {{dish2.price}} € </p>
 								<a href="{{path('app_menu')}}" class="site-btn">Menu</a>
-								<a href="#" class="site-btn sb-c2">Ordina Ora!</a>
+								<a href="{{ path('app_order', {id: dish2.id}) }}" class="site-btn sb-c2">Ordina Ora!</a>
 							</div>
 						</div>
 						<div class="col-lg-6">

@@ -53,14 +53,14 @@
 		<ul class="main-menu">
 			<li><a href="{{path('app_home')}}">Home</a></li>
 			<li><a href="{{path('app_menu')}}">Menu</a></li>
-			<li><a href="blog.html">News</a></li>
+			<li><a href="{{path('app_ordination')}}">Carrello Ordinazioni</a></li>
 			<li><a href="contact.html">Contact</a></li>
 			{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 			<li><a href="#">Dipendenti</a>
 				<ul class="sub-menu">
 					<li><a href="{{path('app_dishes.edit')}}">Pietanze</a></li>
 					<li><a href="{{path('app_dishes.create')}}">Aggiungi al Menu</a></li>
-					<li><a href="artist.html">Artist</a></li>
+					<li><a href="{{path('app_ordination')}}">Ordini Clienti</a></li>
 					<li><a href="blog.html">Blog</a></li>
 					<li><a href="{{path('app_registration')}}" class="register">Create an account</a></li>
 					<li><a href="{{path('app_logout')}}">Logout</a></li>
@@ -147,6 +147,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<!-- Footer section end -->
 	
 	<!--====== Javascripts & Jquery ======-->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 	<script src="{{asset('js/bootstrap.min.js')}}"></script>
 	<script src="{{asset('js/jquery.slicknav.min.js')}}"></script>
